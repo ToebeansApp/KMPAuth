@@ -51,6 +51,9 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.facebookAuthAndroid)
+            api(project.dependencies.platform(libs.firebase.bom))
+            api(libs.firebase.auth)
+            api(libs.firebase.common)
         }
 
         commonMain.dependencies {
@@ -128,6 +131,7 @@ mavenPublishing {
     }
 
     publishToMavenCentral()
-    signAllPublications()
+    // Disable signing for local development
+    // signAllPublications()
 }
 

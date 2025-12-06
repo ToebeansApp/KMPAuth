@@ -41,7 +41,8 @@ allprojects {
 
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "maven-publish")
-    apply(plugin = "signing")
+    // Disable signing for local development
+    // apply(plugin = "signing")
 
 }
 

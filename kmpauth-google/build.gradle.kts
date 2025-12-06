@@ -137,5 +137,6 @@ mavenPublishing {
     }
 
     publishToMavenCentral()
-    signAllPublications()
+    // Disable signing for local development
+    // signAllPublications()
 }

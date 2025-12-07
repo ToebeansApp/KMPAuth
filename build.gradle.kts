@@ -1,7 +1,6 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinMultiplatform
-import org.jetbrains.dokka.gradle.DokkaTask
+import kotlinx.validation.ExperimentalBCVApi
 
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
@@ -21,7 +20,7 @@ plugins {
 
 
 apiValidation {
-    @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
+    @OptIn(ExperimentalBCVApi::class)
     klib {
         enabled = true
     }
@@ -29,8 +28,9 @@ apiValidation {
     ignoredProjects += "composeApp"
 }
 
-
-
+// For publishing: GITHUB_TOKEN must be set in environment
+val githubActor: String = "jordond"
+val githubToken: String? = System.getenv("GITHUB_TOKEN")
 
 allprojects {
     group = "io.github.mirzemehdi"
@@ -41,8 +41,9 @@ allprojects {
 
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "maven-publish")
-    // Disable signing for local development
-    // apply(plugin = "signing")
+    // Make credentials available to subprojects
+    extra["githubActor"] = githubActor
+    extra["githubToken"] = githubToken
 
 }
 

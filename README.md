@@ -1,18 +1,78 @@
-# KMPAuth - Kotlin Multiplatform Authentication Library
-[![Build](https://github.com/mirzemehdi/KMPAuth/actions/workflows/build_and_publish.yml/badge.svg)](https://github.com/mirzemehdi/KMPAuth/actions/workflows/build_and_publish.yml)
+# KMPAuth - Kotlin Multiplatform Authentication Library (Toebeans Fork)
+
+> **Note:** This is a Toebeans fork of [KMPAuth](https://github.com/mirzemehdi/KMPAuth) published to GitHub Packages. This fork is maintained until upstream fixes are merged. We need the latest pre-release of Koin for our project.
+
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.0-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.mirzemehdi/kmpauth-google?color=blue)](https://search.maven.org/search?q=g:io.github.mirzemehdi+kmpauth)
 
 ![badge-android](http://img.shields.io/badge/platform-android-6EDB8D.svg?style=flat)
 ![badge-ios](http://img.shields.io/badge/platform-ios-AAAAFF.svg?style=flat)
 ![badge-web](http://img.shields.io/badge/platform-web-FFCC66.svg?style=flat)
 ![badge-desktop](http://img.shields.io/badge/platform-desktop-FF8E8E.svg?style=flat)
 
+Simple and easy to use Kotlin Multiplatform Authentication library targeting iOS, Android, Desktop and Web (`kmpauth-firebase` module doesn't have web support yet). Supporting **Google**, **Apple**, **Github**, **Facebook** authentication integrations using Firebase.
 
-Simple and easy to use Kotlin Multiplatform Authentication library targeting iOS, Android, Desktop and Web (`kmpauth-firebase` module doesn't have web support yet). Supporting **Google**, **Apple**, **Github**, **Facebook** authentication integrations using Firebase.   
-Because I am using KMPAuth in [FindTravelNow](https://github.com/mirzemehdi/FindTravelNow-KMM/) production KMP project, I'll support development of this library :).   
-Related blog post: [Integrating Google Sign-In into Kotlin Multiplatform](https://proandroiddev.com/integrating-google-sign-in-into-kotlin-multiplatform-8381c189a891)  
-You can check out [Documentation](https://mirzemehdi.github.io/KMPAuth) for full library api information.
+Original project by [Mirzamehdi Karimov](https://github.com/mirzemehdi).
+Related blog post: [Integrating Google Sign-In into Kotlin Multiplatform](https://proandroiddev.com/integrating-google-sign-in-into-kotlin-multiplatform-8381c189a891)
+Original documentation: [Documentation](https://mirzemehdi.github.io/KMPAuth)
+
+## Publishing (Toebeans)
+
+This fork publishes to GitHub Packages under the original `io.github.mirzemehdi` group ID to maintain compatibility with existing imports.
+
+### Publishing the library
+
+Publishing requires a GitHub Personal Access Token with `write:packages` permission. Set the `GITHUB_TOKEN` environment variable:
+
+```bash
+export GITHUB_TOKEN=your-github-token-with-write-packages
+./gradlew publish
+```
+
+**Creating a token:**
+1. Go to https://github.com/settings/tokens?type=beta
+2. Generate a fine-grained token with:
+   - Repository access: `ToebeansApp/KMPAuth`
+   - Permissions: Contents (Read and write), Packages (Read and write)
+3. Use the generated token as `GITHUB_TOKEN`
+
+### Using the library
+
+Add the GitHub Packages repository to your project's `settings.gradle.kts`:
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/ToebeansApp/KMPAuth")
+            credentials {
+                username = "jordond"
+                password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GITHUB_MAVEN_TOKEN")
+            }
+            content {
+                includeGroup("io.github.mirzemehdi")
+            }
+        }
+    }
+}
+```
+
+**Note:** For consuming packages, you only need a token with `read:packages` permission.
+
+Then add dependencies using the same group ID as the original:
+
+```kotlin
+sourceSets {
+    commonMain.dependencies {
+        implementation("io.github.mirzemehdi:kmpauth-google:2.5.0-alpha01")
+        implementation("io.github.mirzemehdi:kmpauth-firebase:2.5.0-alpha01")
+        implementation("io.github.mirzemehdi:kmpauth-uihelper:2.5.0-alpha01")
+    }
+}
+```
+
+**Note:** The group ID is the same as the original fork, so you don't need to change any imports in your code. Just update your repository configuration and version number.
 
 ## Sample App and Code
 <p style="text-align: center;">

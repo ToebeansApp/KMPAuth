@@ -20,15 +20,6 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-    }
-    js(IR) {
-        nodejs()
-        browser()
-        binaries.library()
-    }
     jvm()
     iosX64()
     iosArm64()
@@ -65,9 +56,6 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-        jsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
         }
@@ -102,19 +90,19 @@ android {
 mavenPublishing {
     configure(
         KotlinMultiplatform(
-            javadocJar = JavadocJar.Dokka("dokkaHtml"),
+            javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
             sourcesJar = true
         )
     )
     coordinates(
-        "io.github.mirzemehdi",
+        project.group.toString(),
         "kmpauth-core",
-        project.properties["kmpAuthVersion"] as String
+        project.version.toString()
     )
     pom {
-        name = "KMPAuth"
-        description = " Kotlin Multiplatform Authentication Library targeting ios and android"
-        url = "https://github.com/mirzemehdi/KMPAuth/"
+        name = "KMPAuth (Toebeans Fork)"
+        description = "Kotlin Multiplatform Authentication Library targeting ios and android (Toebeans fork)"
+        url = "https://github.com/ToebeansApp/KMPAuth/"
         licenses {
             license {
                 name.set("Apache-2.0")
@@ -123,22 +111,33 @@ mavenPublishing {
         }
         developers {
             developer {
+                name.set("Toebeans")
+                email.set("hello@toebeans.life")
+            }
+            developer {
                 name.set("Mirzamehdi Karimov")
                 email.set("mirzemehdi@gmail.com")
             }
         }
         scm {
-            connection.set("https://github.com/mirzemehdi/KMPAuth.git")
-            url.set("https://github.com/mirzemehdi/KMPAuth")
-        }
-        issueManagement {
-            system.set("Github")
-            url.set("https://github.com/mirzemehdi/KMPAuth/issues")
+            connection.set("https://github.com/ToebeansApp/KMPAuth.git")
+            url.set("https://github.com/ToebeansApp/KMPAuth")
         }
     }
 
-    publishToMavenCentral()
-    // Disable signing for local development
-    // signAllPublications()
+    // Publishing repositories - configured via extension
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ToebeansApp/KMPAuth")
+            credentials {
+                username = project.extra["githubActor"] as String?
+                password = project.extra["githubToken"] as String?
+            }
+        }
+    }
 }
 
